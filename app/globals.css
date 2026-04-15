@@ -1,0 +1,143 @@
+@import "tailwindcss";
+@source "../components";
+@source "../app";
+@source "../lib";
+@source "../hooks";
+
+@plugin "tailwindcss-animate";
+
+@custom-variant dark (&:is(.dark *));
+
+@theme {
+  --font-sans: var(--font-inter, var(--font-geist-sans));
+  --font-mono: var(--font-geist-mono);
+  --font-playfair: var(--font-playfair);
+
+  --color-background: hsl(var(--background));
+  --color-foreground: hsl(var(--foreground));
+  --color-card: hsl(var(--card));
+  --color-card-foreground: hsl(var(--card-foreground));
+  --color-popover: hsl(var(--popover));
+  --color-popover-foreground: hsl(var(--popover-foreground));
+  --color-primary: hsl(var(--primary));
+  --color-primary-foreground: hsl(var(--primary-foreground));
+  --color-secondary: hsl(var(--secondary));
+  --color-secondary-foreground: hsl(var(--secondary-foreground));
+  --color-muted: hsl(var(--muted));
+  --color-muted-foreground: hsl(var(--muted-foreground));
+  --color-accent: hsl(var(--accent));
+  --color-accent-foreground: hsl(var(--accent-foreground));
+  --color-destructive: hsl(var(--destructive));
+  --color-destructive-foreground: hsl(var(--destructive-foreground));
+  --color-border: hsl(var(--border));
+  --color-input: hsl(var(--input));
+  --color-ring: hsl(var(--ring));
+
+  --color-admin-primary: #1E3A5F;
+  --color-admin-secondary: #2563EB;
+  --color-user-primary: #2D6A4F;
+  --color-user-secondary: #40916C;
+}
+
+:root {
+  --background: 60 33% 98%; /* FAFAF5 */
+  --foreground: 240 29% 15%; /* 1A1A2E */
+  
+  --card: 0 0% 100%;
+  --card-foreground: 240 29% 15%;
+  
+  --popover: 0 0% 100%;
+  --popover-foreground: 240 29% 15%;
+  
+  --primary: 263 68% 35%; /* #4A1D96 */
+  --primary-foreground: 0 0% 100%;
+  
+  --secondary: 153 40% 30%; /* #2D6A4F */
+  --secondary-foreground: 0 0% 100%;
+  
+  --muted: 210 20% 96%;
+  --muted-foreground: 215 16% 47%;
+  
+  --accent: 258 90% 66%; /* #8B5CF6 */
+  --accent-foreground: 0 0% 100%;
+  
+  --destructive: 0 72% 51%; /* #DC2626 */
+  --destructive-foreground: 0 0% 100%;
+  
+  --border: 220 13% 91%;
+  --input: 220 13% 91%;
+  --ring: 263 68% 35%;
+  
+  --radius: 0.75rem;
+
+  --chart-1: 263 68% 35%;
+  --chart-2: 153 40% 30%;
+  --chart-3: 258 90% 66%;
+  --chart-4: 35 92% 50%;
+  --chart-5: 160 84% 39%;
+}
+
+.dark {
+  --background: 222.2 84% 4.9%;
+  --foreground: 210 40% 98%;
+  --card: 222.2 84% 4.9%;
+  --card-foreground: 210 40% 98%;
+  --popover: 222.2 84% 4.9%;
+  --popover-foreground: 210 40% 98%;
+  --primary: 210 40% 98%;
+  --primary-foreground: 222.2 47.4% 11.2%;
+  --secondary: 217.2 32.6% 17.5%;
+  --secondary-foreground: 210 40% 98%;
+  --muted: 217.2 32.6% 17.5%;
+  --muted-foreground: 215 20.2% 65.1%;
+  --accent: 217.2 32.6% 17.5%;
+  --accent-foreground: 210 40% 98%;
+  --destructive: 0 62.8% 30.6%;
+  --destructive-foreground: 210 40% 98%;
+  --border: 217.2 32.6% 17.5%;
+  --input: 217.2 32.6% 17.5%;
+  --ring: 212.7 26.8% 83.9%;
+  --chart-1: 220 70% 50%;
+  --chart-2: 160 60% 45%;
+  --chart-3: 30 80% 55%;
+  --chart-4: 280 65% 60%;
+  --chart-5: 340 75% 55%;
+}
+
+@layer base {
+  * {
+    @apply border-border;
+  }
+
+  body {
+    @apply bg-background text-foreground;
+  }
+
+  .font-playfair {
+    font-family: var(--font-playfair), Georgia, serif;
+  }
+
+  .bg-brand-bg {
+    background-color: #FAFAF5;
+  }
+
+  .text-brand-text-primary { color: #1A1A2E; }
+  .text-brand-text-secondary { color: #6B7280; }
+  .text-brand-primary { color: #4A1D96; }
+  .text-brand-success { color: #059669; }
+  .text-brand-warning { color: #D97706; }
+  .text-brand-error { color: #DC2626; }
+  .bg-brand-primary { background-color: #4A1D96; }
+  .bg-brand-primary-dark { background-color: #3B0A8C; }
+  .bg-brand-success { background-color: #059669; }
+  .border-brand-primary { border-color: #4A1D96; }
+  .shadow-brand-primary\/30 { box-shadow: 0 4px 14px rgba(74, 29, 150, 0.3); }
+  .text-brand-surface { color: #FFFFFF; }
+  .bg-brand-surface { background-color: #FFFFFF; }
+  .text-brand-accent { color: #8B5CF6; }
+  .bg-brand-accent { background-color: #8B5CF6; }
+  .text-brand-primary-light { color: #7C3AED; }
+  .bg-brand-primary-light { background-color: #7C3AED; }
+  .bg-brand-secondary { background-color: #2D6A4F; }
+  .text-brand-secondary { color: #2D6A4F; }
+}
