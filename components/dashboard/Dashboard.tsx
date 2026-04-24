@@ -254,12 +254,12 @@ export function Dashboard() {
                                 <div key={farmer.userId} className="flex justify-between items-center border-b pb-2 last:border-0 last:pb-0">
                                     <div>
                                         <div className="flex items-center gap-2">
-                                            <p className="font-medium text-sm">{farmer.fullName}</p>
-                                            <span className={`text-[10px] px-2 py-0.5 rounded-full font-bold uppercase ${farmer.status === 'ACTIVE' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
+                                            <p className="font-semibold text-base">{farmer.fullName}</p>
+                                            <span className={`text-xs px-2 py-0.5 rounded-full font-bold uppercase ${farmer.status === 'ACTIVE' ? 'bg-green-100 text-green-700' : 'bg-red-100 text-red-700'}`}>
                                                 {farmer.status}
                                             </span>
                                         </div>
-                                        <p className="text-xs text-muted-foreground">{farmer.email}</p>
+                                        <p className="text-sm text-muted-foreground">{farmer.email}</p>
                                     </div>
                                     <div className="text-right">
                                         <p className="font-semibold text-primary">{fmt(farmer.totalSpent)}</p>
@@ -294,10 +294,10 @@ export function Dashboard() {
                                     return (
                                         <div key={idx} className="flex justify-between items-center border-b pb-2 last:border-0 last:pb-0">
                                             <div>
-                                                <p className="font-medium text-sm">{type} - {desc}</p>
-                                                <p className="text-xs text-muted-foreground">{date}</p>
+                                                <p className="font-semibold text-base">{type} - {desc}</p>
+                                                <p className="text-sm text-muted-foreground">{date}</p>
                                             </div>
-                                            <span className="font-medium">{fmt(amount)}</span>
+                                            <span className="font-bold text-lg">{fmt(amount)}</span>
                                         </div>
                                     )
                                 })

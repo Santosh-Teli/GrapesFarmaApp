@@ -31,7 +31,7 @@ export function AuthSplitLayout({
             </div>
             <span className="font-playfair text-2xl font-bold tracking-tight">AgriTrack</span>
           </Link>
-          
+
           <div className="max-w-md mt-24">
             <h1 className="font-playfair text-4xl lg:text-5xl font-bold leading-tight mb-6">
               {title}

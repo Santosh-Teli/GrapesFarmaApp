@@ -11,7 +11,7 @@ import { Plus, Pencil, Trash2, Search, AlertTriangle } from "lucide-react";
 import { cn, formatCurrency } from "@/lib/utils";
 
 // Helper for ID generation
-const generateId = () => Math.random().toString(36).substr(2, 9);
+const generateId = () => crypto.randomUUID();
 
 export default function PesticideMasterPage() {
     const { pesticides, setPesticides } = useStore();
@@ -61,7 +61,7 @@ export default function PesticideMasterPage() {
             setPesticides(pesticides.map(p => p.id === editingId ? { ...p, ...formData } as Pesticide : p));
         } else {
             const newPest: Pesticide = {
-                id: `pest_${generateId()}`,
+                id: generateId(),
                 ...formData
             } as Pesticide;
             setPesticides([...pesticides, newPest]);
@@ -171,7 +171,7 @@ export default function PesticideMasterPage() {
                         <div className="space-y-2">
                             <label className="text-sm font-medium">Unit Type</label>
                             <select
-                                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                                className="flex h-12 w-full rounded-md border border-input bg-background px-4 py-2 text-base"
                                 value={formData.unitType}
                                 onChange={(e) => setFormData({ ...formData, unitType: e.target.value as UnitType })}
                             >

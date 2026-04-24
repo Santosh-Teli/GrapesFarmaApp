@@ -2,6 +2,7 @@
 
 import { useState, useEffect } from "react";
 import { useRouter } from "next/navigation";
+import Link from "next/link";
 import { useStore } from "@/hooks/use-store";
 import { SprayRecord, PesticideUsage } from "@/types";
 import { Button } from "@/components/ui/button";
@@ -12,7 +13,7 @@ import { formatCurrency } from "@/lib/utils";
 import { format } from "date-fns";
 
 // Helper ID gen
-const generateId = () => Math.random().toString(36).substr(2, 9);
+const generateId = () => crypto.randomUUID();
 
 interface SprayFormProps {
     initialData?: SprayRecord;
@@ -87,7 +88,7 @@ export function SprayForm({ initialData, isEdit = false }: SprayFormProps) {
 
         const record: SprayRecord = {
             ...formData,
-            id: initialData?.id || `spray_${generateId()}`,
+            id: initialData?.id || generateId(),
             totalPesticideCost,
             totalSprayCost,
             pesticideDetails: pesticideRows
@@ -173,7 +174,7 @@ export function SprayForm({ initialData, isEdit = false }: SprayFormProps) {
                             <div className="space-y-2">
                                 <label className="text-sm font-medium">Plot</label>
                                 <select
-                                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                                    className="flex h-12 w-full rounded-md border border-input bg-background px-4 py-2 text-base"
                                     value={formData.plotId}
                                     onChange={e => setFormData({ ...formData, plotId: e.target.value })}
                                 >
@@ -186,7 +187,7 @@ export function SprayForm({ initialData, isEdit = false }: SprayFormProps) {
                             <div className="space-y-2">
                                 <label className="text-sm font-medium">Crop Stage</label>
                                 <select
-                                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                                    className="flex h-12 w-full rounded-md border border-input bg-background px-4 py-2 text-base"
                                     value={formData.cropStage}
                                     onChange={e => setFormData({ ...formData, cropStage: e.target.value as any })}
                                 >
@@ -199,7 +200,7 @@ export function SprayForm({ initialData, isEdit = false }: SprayFormProps) {
                             <div className="space-y-2">
                                 <label className="text-sm font-medium">Weather</label>
                                 <select
-                                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                                    className="flex h-12 w-full rounded-md border border-input bg-background px-4 py-2 text-base"
                                     value={formData.weatherCondition}
                                     onChange={e => setFormData({ ...formData, weatherCondition: e.target.value as any })}
                                 >
@@ -212,7 +213,7 @@ export function SprayForm({ initialData, isEdit = false }: SprayFormProps) {
                             <div className="space-y-2">
                                 <label className="text-sm font-medium">Reason</label>
                                 <select
-                                    className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                                    className="flex h-12 w-full rounded-md border border-input bg-background px-4 py-2 text-base"
                                     value={formData.sprayReason}
                                     onChange={e => setFormData({ ...formData, sprayReason: e.target.value as any })}
                                 >
@@ -232,8 +233,13 @@ export function SprayForm({ initialData, isEdit = false }: SprayFormProps) {
                     {/* Section 2: Pesticide Details */}
                     <Card>
                         <CardHeader className="flex flex-row items-center justify-between">
-                            <CardTitle>Pesticides Used</CardTitle>
-                            <Button size="sm" onClick={handleAddPesticideRow}><Plus className="h-4 w-4 mr-2" /> Add Pesticide</Button>
+                            <div>
+                                <CardTitle>Pesticides Used</CardTitle>
+                                <p className="text-xs text-muted-foreground mt-1">
+                                    Don't see your pesticide? <Link href="/pesticides" className="text-primary underline">Add it in Pesticide Master</Link>
+                                </p>
+                            </div>
+                            <Button size="sm" onClick={handleAddPesticideRow}><Plus className="h-4 w-4 mr-2" /> Add Row</Button>
                         </CardHeader>
                         <CardContent className="space-y-4">
                             {pesticideRows.map((row, index) => (
@@ -241,7 +247,7 @@ export function SprayForm({ initialData, isEdit = false }: SprayFormProps) {
                                     <div className="md:col-span-4 space-y-1">
                                         <label className="text-xs font-medium">Pesticide</label>
                                         <select
-                                            className="flex h-9 w-full rounded-md border border-input bg-background px-3 py-1 text-sm"
+                                            className="flex h-12 w-full rounded-md border border-input bg-background px-4 py-2 text-base"
                                             value={row.pesticideId}
                                             onChange={e => handlePesticideChange(index, "pesticideId", e.target.value)}
                                         >

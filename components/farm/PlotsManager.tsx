@@ -11,7 +11,7 @@ import { Plus, Pencil, Trash2 } from "lucide-react";
 import { cn } from "@/lib/utils";
 
 // Helper for ID generation
-const generateId = () => Math.random().toString(36).substr(2, 9);
+const generateId = () => crypto.randomUUID();
 
 export function PlotsManager() {
     const { plots, setPlots, farm } = useStore();
@@ -49,7 +49,7 @@ export function PlotsManager() {
         } else {
             // Add
             const newPlot: Plot = {
-                id: `plot_${generateId()}`,
+                id: generateId(),
                 farmId: farm.id,
                 isActive: true,
                 ...formData

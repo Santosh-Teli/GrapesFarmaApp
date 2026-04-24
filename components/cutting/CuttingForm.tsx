@@ -11,7 +11,7 @@ import { ArrowLeft, Save } from "lucide-react";
 import { formatCurrency } from "@/lib/utils";
 import { format } from "date-fns";
 
-const generateId = () => Math.random().toString(36).substr(2, 9);
+const generateId = () => crypto.randomUUID();
 
 interface CuttingFormProps {
     initialData?: CuttingRecord;
@@ -75,7 +75,7 @@ export function CuttingForm({ initialData, isEdit = false }: CuttingFormProps) {
 
         const record: CuttingRecord = {
             ...formData,
-            id: initialData?.id || `cut_${generateId()}`,
+            id: initialData?.id || generateId(),
         } as CuttingRecord;
 
         if (isEdit) {
@@ -107,7 +107,7 @@ export function CuttingForm({ initialData, isEdit = false }: CuttingFormProps) {
                         <div className="space-y-2">
                             <label className="text-sm font-medium">Plot</label>
                             <select
-                                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                                className="flex h-12 w-full rounded-md border border-input bg-background px-4 py-2 text-base"
                                 value={formData.plotId}
                                 onChange={e => setFormData({ ...formData, plotId: e.target.value })}
                             >
@@ -120,7 +120,7 @@ export function CuttingForm({ initialData, isEdit = false }: CuttingFormProps) {
                         <div className="space-y-2">
                             <label className="text-sm font-medium">Cutting Type</label>
                             <select
-                                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                                className="flex h-12 w-full rounded-md border border-input bg-background px-4 py-2 text-base"
                                 value={formData.cuttingType}
                                 onChange={e => setFormData({ ...formData, cuttingType: e.target.value as CuttingType })}
                             >
