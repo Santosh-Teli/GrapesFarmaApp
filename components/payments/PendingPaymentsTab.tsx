@@ -11,7 +11,7 @@ import { ChevronDown, ChevronRight, CheckSquare } from "lucide-react";
 import { formatCurrency, cn } from "@/lib/utils";
 import { format } from "date-fns";
 
-const generateId = () => Math.random().toString(36).substr(2, 9);
+const generateId = () => crypto.randomUUID();
 
 export function PendingPaymentsTab() {
     const { labourers, labourWork, setLabourWork, expenses, setExpenses } = useStore();

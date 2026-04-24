@@ -25,7 +25,7 @@ import { useEffect } from "react";
 type RegisterValues = z.infer<typeof registerSchema>;
 type UsernameStatus = "idle" | "checking" | "available" | "taken";
 
-const inputClass = "h-11 border-gray-200 focus:border-brand-primary pl-10";
+const inputClass = "h-12 text-base border-gray-200 focus:border-brand-primary pl-10";
 
 function FieldWrapper({ children, error }: { children: React.ReactNode; error?: string }) {
   return (
@@ -227,7 +227,7 @@ export function RegisterForm() {
       <Button
         type="submit"
         disabled={isLoading}
-        className="w-full h-11 bg-brand-primary hover:bg-brand-primary-dark text-white font-semibold rounded-xl shadow-lg shadow-brand-primary/30 transition-all duration-200"
+        className="w-full h-12 text-base bg-brand-primary hover:bg-brand-primary-dark text-white font-semibold rounded-xl shadow-lg shadow-brand-primary/30 transition-all duration-200"
       >
         {isLoading ? (
           <><Loader2 className="h-4 w-4 mr-2 animate-spin" />Creating account...</>

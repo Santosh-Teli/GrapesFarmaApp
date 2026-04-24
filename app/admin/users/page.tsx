@@ -42,7 +42,7 @@ export default function UserManagementPage() {
         if (!user) return;
         
         const newStatus = user.status === "ACTIVE" ? "SUSPENDED" : "ACTIVE";
-        const supabase = getSupabaseClient();
+        const supabase = getSupabaseClient() as any;
         
         const { error } = await supabase.from("profiles").update({ status: newStatus }).eq("id", userId);
         

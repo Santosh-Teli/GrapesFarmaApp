@@ -11,7 +11,7 @@ import { Plus, Trash2, Pencil } from "lucide-react";
 import { formatCurrency, cn } from "@/lib/utils";
 import { format } from "date-fns";
 
-const generateId = () => Math.random().toString(36).substr(2, 9);
+const generateId = () => crypto.randomUUID();
 
 export function OtherExpensesManager() {
     const { expenses, setExpenses } = useStore();
@@ -48,7 +48,7 @@ export function OtherExpensesManager() {
             setExpenses(expenses.map(e => e.id === editingId ? { ...e, ...formData } as OtherExpense : e));
         } else {
             const newExp: OtherExpense = {
-                id: `exp_${generateId()}`,
+                id: generateId(),
                 ...formData
             } as OtherExpense;
             setExpenses([...expenses, newExp]);
@@ -132,7 +132,7 @@ export function OtherExpensesManager() {
                         <div className="space-y-2">
                             <label className="text-sm font-medium">Category</label>
                             <select
-                                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                                className="flex h-12 w-full rounded-md border border-input bg-background px-4 py-2 text-base"
                                 value={formData.category}
                                 onChange={e => setFormData({ ...formData, category: e.target.value as ExpenseCategory })}
                             >
@@ -158,7 +158,7 @@ export function OtherExpensesManager() {
                         <div className="space-y-2">
                             <label className="text-sm font-medium">Status</label>
                             <select
-                                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                                className="flex h-12 w-full rounded-md border border-input bg-background px-4 py-2 text-base"
                                 value={formData.paymentStatus}
                                 onChange={e => setFormData({ ...formData, paymentStatus: e.target.value as PaymentStatus })}
                                 disabled={!!editingId && formData.paymentStatus === "Paid"} // If fully paid maybe lock it? Nah let them edit.

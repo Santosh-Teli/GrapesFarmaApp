@@ -6,7 +6,7 @@ import { cn } from "@/lib/utils";
 import {
     LayoutDashboard, Tractor, FlaskConical, Droplets, Scissors,
     Users, CalendarCheck, Receipt, Wallet, FileText, X, LogOut,
-    ShieldCheck, Grape
+    ShieldCheck, Grape, TrendingUp
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuthStore } from "@/store/authStore";
@@ -29,6 +29,7 @@ const menuItems = [
     { href: "/expenses", label: "Expense Management", icon: Receipt },
     { href: "/payments", label: "Payment Management", icon: Wallet },
     { href: "/reports", label: "Reports", icon: FileText },
+    { href: "/revenue", label: "Revenue & Summary", icon: TrendingUp },
 ];
 
 const adminItems = [
@@ -101,13 +102,13 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                                             href={item.href}
                                             onClick={onClose}
                                             className={cn(
-                                                "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-150",
+                                                "flex items-center gap-3 rounded-lg px-4 py-3 text-base font-medium transition-all duration-150",
                                                 isActive
                                                     ? "bg-[#4A1D96] text-white shadow-md shadow-purple-900/20"
                                                     : "text-muted-foreground hover:bg-accent hover:text-accent-foreground"
                                             )}
                                         >
-                                            <Icon className="h-4 w-4 shrink-0" />
+                                            <Icon className="h-5 w-5 shrink-0" />
                                             {item.label}
                                         </Link>
                                     </li>
@@ -129,13 +130,13 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                                                 href={item.href}
                                                 onClick={onClose}
                                                 className={cn(
-                                                    "flex items-center gap-3 rounded-lg px-3 py-2.5 text-sm font-medium transition-all duration-150",
+                                                    "flex items-center gap-3 rounded-lg px-4 py-3 text-base font-medium transition-all duration-150",
                                                     isActive
                                                         ? "bg-[#4A1D96] text-white shadow-md shadow-purple-900/20"
                                                         : "text-[#4A1D96] bg-purple-50 hover:bg-purple-100"
                                                 )}
                                             >
-                                                <Icon className="h-4 w-4 shrink-0" />
+                                                <Icon className="h-5 w-5 shrink-0" />
                                                 {item.label}
                                             </Link>
                                         </li>

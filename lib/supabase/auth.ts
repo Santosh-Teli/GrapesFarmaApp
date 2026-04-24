@@ -18,12 +18,16 @@ export interface AuthResult<T = undefined> {
 export async function checkUsernameAvailability(
   username: string
 ): Promise<{ available: boolean }> {
-  const supabase = getSupabaseClient();
-  const { data } = await supabase
-    .from("profiles")
-    .select("id")
-    .ilike("username", username)
-    .maybeSingle();
+  const supabase = getSupabaseClient() as any;
+  const { data, error } = await supabase.rpc("check_username_exists", {
+    p_username: username,
+  });
+
+  if (error) {
+    console.error("Error checking username:", error);
+    return { available: false };
+  }
+  
   return { available: !data };
 }
 
@@ -103,14 +107,15 @@ export async function supabaseLogin(data: {
 }): Promise<AuthResult<{ user: ProfileRow; token: string }>> {
   const supabase = getSupabaseClient();
 
-  // Step 1: Resolve email from username
-  const { data: profileData, error: profileError } = await supabase
-    .from("profiles")
-    .select("*")
-    .ilike("username", data.username)
-    .maybeSingle();
+  // Step 1: Resolve email from username using secure RPC to bypass RLS
+  const supabase2 = getSupabaseClient() as any;
+  const { data: profileData, error: profileError } = await supabase2.rpc(
+    "get_profile_by_username",
+    { p_username: data.username }
+  );
 
-  const profile = profileData as unknown as ProfileRow | null;
+  // The RPC returns a set of rows, so we take the first one
+  const profile = profileData && profileData.length > 0 ? (profileData[0] as unknown as ProfileRow) : null;
 
   if (profileError || !profile) {
     return {

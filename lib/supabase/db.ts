@@ -660,3 +660,100 @@ export async function deletePayment(id: string): Promise<void> {
   const supabase = getSupabaseClient();
   await supabase.from("payments").delete().eq("id", id);
 }
+
+// ==========================================
+// FEEDBACK
+// ==========================================
+export async function createFeedback(userId: string, message: string) {
+  const supabase = getSupabaseClient() as any;
+  const { error } = await supabase
+    .from("user_feedbacks")
+    .insert({ user_id: userId, message });
+  if (error) throw error;
+}
+
+export async function getAllFeedbacks() {
+  const supabase = getSupabaseClient() as any;
+  const { data, error } = await supabase
+    .from("user_feedbacks")
+    .select("*, profiles(full_name, email)")
+    .order("created_at", { ascending: false });
+  if (error || !data) return [];
+  
+  return data.map((d: any) => ({
+    id: d.id,
+    userId: d.user_id,
+    message: d.message,
+    status: d.status,
+    createdAt: d.created_at,
+    userFullName: d.profiles?.full_name,
+    userEmail: d.profiles?.email,
+  }));
+}
+
+export async function updateFeedbackStatus(id: string, status: "UNREAD" | "READ" | "RESOLVED") {
+  const supabase = getSupabaseClient() as any;
+  const { error } = await supabase
+    .from("user_feedbacks")
+    .update({ status })
+    .eq("id", id);
+  if (error) throw error;
+}
+
+// ==========================================
+// PRODUCT SALES
+// ==========================================
+export async function getSales(userId: string) {
+  const supabase = getSupabaseClient() as any;
+  const { data, error } = await supabase
+    .from("product_sales")
+    .select("*")
+    .eq("user_id", userId)
+    .order("sale_date", { ascending: false });
+  if (error || !data) return [];
+  
+  return data.map((d: any) => ({
+    id: d.id,
+    productName: d.product_name,
+    saleDate: d.sale_date,
+    quantity: d.quantity,
+    unit: d.unit as "KG" | "Quintal" | "Ton",
+    ratePerUnit: d.rate_per_unit,
+    totalIncome: d.total_income
+  }));
+}
+
+export async function upsertSale(userId: string, sale: any) {
+  const supabase = getSupabaseClient() as any;
+  const { data, error } = await supabase
+    .from("product_sales")
+    .upsert({
+      id: sale.id,
+      user_id: userId,
+      product_name: sale.productName,
+      sale_date: sale.saleDate,
+      quantity: sale.quantity,
+      unit: sale.unit,
+      rate_per_unit: sale.ratePerUnit,
+      total_income: sale.totalIncome
+    })
+    .select()
+    .single();
+  if (error || !data) throw error;
+  
+  return {
+    id: data.id,
+    productName: data.product_name,
+    saleDate: data.sale_date,
+    quantity: data.quantity,
+    unit: data.unit as "KG" | "Quintal" | "Ton",
+    ratePerUnit: data.rate_per_unit,
+    totalIncome: data.total_income
+  };
+}
+
+export async function deleteSale(id: string) {
+  const supabase = getSupabaseClient() as any;
+  const { error } = await supabase.from("product_sales").delete().eq("id", id);
+  if (error) throw error;
+}

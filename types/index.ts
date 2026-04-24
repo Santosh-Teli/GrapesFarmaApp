@@ -144,3 +144,16 @@ export interface Payment {
     linkedWorkIds: string[]; // IDs of LabourWork entries paid by this payment
     userId: string;
 }
+
+export type FeedbackStatus = 'UNREAD' | 'READ' | 'RESOLVED';
+
+export interface UserFeedback {
+    id: string;
+    userId: string;
+    message: string;
+    status: FeedbackStatus;
+    createdAt: string;
+    // For admin UI display:
+    userFullName?: string;
+    userEmail?: string;
+}

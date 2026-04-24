@@ -11,7 +11,7 @@ import { Plus, Filter, Trash2, Pencil, Calendar, CheckCircle } from "lucide-reac
 import { formatCurrency, cn } from "@/lib/utils";
 import { format } from "date-fns";
 
-const generateId = () => Math.random().toString(36).substr(2, 9);
+const generateId = () => crypto.randomUUID();
 
 export function SingleEntryTab() {
     const { labourers, labourWork, setLabourWork } = useStore();
@@ -97,7 +97,7 @@ export function SingleEntryTab() {
             setLabourWork(labourWork.map(w => w.id === editingEntry.id ? { ...w, ...formData } as LabourWork : w));
         } else {
             const newEntry: LabourWork = {
-                id: `work_${generateId()}`,
+                id: generateId(),
                 ...formData
             } as LabourWork;
             setLabourWork([newEntry, ...labourWork]);
@@ -282,7 +282,7 @@ export function SingleEntryTab() {
                         <div className="space-y-2">
                             <label className="text-sm font-medium">Labour</label>
                             <select
-                                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                                className="flex h-12 w-full rounded-md border border-input bg-background px-4 py-2 text-base"
                                 value={formData.labourId}
                                 onChange={e => handleLabourChange(e.target.value)}
                             >
@@ -301,7 +301,7 @@ export function SingleEntryTab() {
                         <div className="space-y-2">
                             <label className="text-sm font-medium">Work Type</label>
                             <select
-                                className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                                className="flex h-12 w-full rounded-md border border-input bg-background px-4 py-2 text-base"
                                 value={formData.workType}
                                 onChange={e => setFormData({ ...formData, workType: e.target.value as WorkType })}
                             >
@@ -351,7 +351,7 @@ export function SingleEntryTab() {
                     <div className="space-y-2">
                         <label className="text-sm font-medium">Payment Mode</label>
                         <select
-                            className="flex h-10 w-full rounded-md border border-input bg-background px-3 py-2 text-sm"
+                            className="flex h-12 w-full rounded-md border border-input bg-background px-4 py-2 text-base"
                             value={paymentData.paymentMode}
                             onChange={e => setPaymentData({ ...paymentData, paymentMode: e.target.value as PaymentMode })}
                         >

@@ -127,7 +127,7 @@ function LoginFormInner() {
             <Input
               id="username"
               placeholder="Enter your username"
-              className="pl-10 h-11 border-gray-200 focus:border-brand-primary focus:ring-brand-primary/20"
+              className="pl-10 h-12 text-base border-gray-200 focus:border-brand-primary focus:ring-brand-primary/20"
               {...register("username")}
             />
           </div>
@@ -150,7 +150,7 @@ function LoginFormInner() {
               id="password"
               type={showPassword ? "text" : "password"}
               placeholder="Enter your password"
-              className="pl-10 pr-10 h-11 border-gray-200 focus:border-brand-primary focus:ring-brand-primary/20"
+              className="pl-10 pr-10 h-12 text-base border-gray-200 focus:border-brand-primary focus:ring-brand-primary/20"
               {...register("password")}
             />
             <button
@@ -170,7 +170,7 @@ function LoginFormInner() {
         <Button
           type="submit"
           disabled={isLoading}
-          className="w-full h-11 bg-brand-primary hover:bg-brand-primary-dark text-white font-semibold rounded-xl transition-all duration-200 shadow-lg shadow-brand-primary/30"
+          className="w-full h-12 text-base bg-brand-primary hover:bg-brand-primary-dark text-white font-semibold rounded-xl transition-all duration-200 shadow-lg shadow-brand-primary/30"
         >
           {isLoading ? (
             <>

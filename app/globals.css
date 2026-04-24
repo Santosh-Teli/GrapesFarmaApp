@@ -140,4 +140,20 @@
   .bg-brand-primary-light { background-color: #7C3AED; }
   .bg-brand-secondary { background-color: #2D6A4F; }
   .text-brand-secondary { color: #2D6A4F; }
+
+  /* Fix for date input calendar icon clipping */
+  input[type="date"] {
+    position: relative;
+  }
+  input[type="date"]::-webkit-calendar-picker-indicator {
+    height: 1.2rem;
+    width: 1.2rem;
+    position: absolute;
+    right: 12px;
+    top: 50%;
+    transform: translateY(-50%);
+    cursor: pointer;
+    padding: 0;
+    margin: 0;
+  }
 }

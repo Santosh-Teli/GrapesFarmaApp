@@ -11,7 +11,7 @@ import { formatCurrency, cn } from "@/lib/utils";
 import { format } from "date-fns";
 import { CheckSquare, Save } from "lucide-react";
 
-const generateId = () => Math.random().toString(36).substr(2, 9);
+const generateId = () => crypto.randomUUID();
 
 export function BulkEntryTab() {
     const { labourers, setLabourWork, labourWork } = useStore();
@@ -52,7 +52,7 @@ export function BulkEntryTab() {
                 const amount = dayType === "Full_Day" ? salary : salary / 2;
 
                 newEntries.push({
-                    id: `work_${generateId()}_${id}`, // unique-ish
+                    id: generateId(),
                     labourId: id,
                     workDate: date,
                     workType,

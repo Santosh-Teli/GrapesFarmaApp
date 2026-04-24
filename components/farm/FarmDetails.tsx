@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useState, useEffect } from "react";
 import { useStore } from "@/hooks/use-store";
 import { useAuthStore } from "@/store/authStore";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -27,6 +27,18 @@ export function FarmDetails() {
         location: farm?.location || "",
         phone: farm?.phone || effectivePhone
     });
+
+    useEffect(() => {
+        if (farm && !isEditing) {
+            setFormData({
+                name: farm.name || effectiveName,
+                ownerName: farm.ownerName || effectiveOwner,
+                totalAcres: farm.totalAcres || 0,
+                location: farm.location || "",
+                phone: farm.phone || effectivePhone
+            });
+        }
+    }, [farm, isEditing, effectiveName, effectiveOwner, effectivePhone]);
 
     const handleSave = () => {
         const updatedFarm = { 

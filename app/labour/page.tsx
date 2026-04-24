@@ -11,7 +11,7 @@ import { Modal } from "@/components/ui/modal";
 import { Plus, Search, User, Phone, Briefcase, Calendar, DollarSign, ExternalLink } from "lucide-react";
 import { cn, formatCurrency } from "@/lib/utils";
 
-const generateId = () => Math.random().toString(36).substr(2, 9);
+const generateId = () => crypto.randomUUID();
 
 export default function LabourMasterPage() {
     const { labourers, setLabourers, labourWork } = useStore();
@@ -61,7 +61,7 @@ export default function LabourMasterPage() {
             setLabourers(labourers.map(l => l.id === editingId ? { ...l, ...formData } as Labour : l));
         } else {
             const newLabour: Labour = {
-                id: `lab_${generateId()}`,
+                id: generateId(),
                 ...formData
             } as Labour;
             setLabourers([...labourers, newLabour]);

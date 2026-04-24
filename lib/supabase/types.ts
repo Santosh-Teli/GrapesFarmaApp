@@ -406,6 +406,58 @@ export interface Database {
           linked_work_ids?: string[];
         };
       };
+      user_feedbacks: {
+        Row: {
+          id: string;
+          user_id: string;
+          message: string;
+          status: "UNREAD" | "READ" | "RESOLVED";
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          message: string;
+          status?: "UNREAD" | "READ" | "RESOLVED";
+          created_at?: string;
+        };
+        Update: {
+          message?: string;
+          status?: "UNREAD" | "READ" | "RESOLVED";
+        };
+      };
+      product_sales: {
+        Row: {
+          id: string;
+          user_id: string;
+          product_name: string;
+          sale_date: string;
+          quantity: number;
+          unit: "KG" | "Quintal" | "Ton";
+          rate_per_unit: number;
+          total_income: number;
+          created_at: string;
+        };
+        Insert: {
+          id?: string;
+          user_id: string;
+          product_name: string;
+          sale_date: string;
+          quantity: number;
+          unit: "KG" | "Quintal" | "Ton";
+          rate_per_unit: number;
+          total_income: number;
+          created_at?: string;
+        };
+        Update: {
+          product_name?: string;
+          sale_date?: string;
+          quantity?: number;
+          unit?: "KG" | "Quintal" | "Ton";
+          rate_per_unit?: number;
+          total_income?: number;
+        };
+      };
     };
     Functions: {
       is_admin: {
@@ -428,3 +480,5 @@ export type CuttingRecordRow = Database["public"]["Tables"]["cutting_records"]["
 export type LabourWorkRow = Database["public"]["Tables"]["labour_work"]["Row"];
 export type OtherExpenseRow = Database["public"]["Tables"]["other_expenses"]["Row"];
 export type PaymentRow = Database["public"]["Tables"]["payments"]["Row"];
+export type UserFeedbackRow = Database["public"]["Tables"]["user_feedbacks"]["Row"];
+export type ProductSaleRow = Database["public"]["Tables"]["product_sales"]["Row"];

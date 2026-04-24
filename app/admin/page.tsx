@@ -10,8 +10,10 @@ import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import {
     Users, ShieldCheck, UserCheck, UserX, Grape,
     FlaskConical, Scissors, Droplets, Receipt, BadgeCheck,
-    TrendingUp, Activity
+    TrendingUp, Activity, MessageSquare
 } from "lucide-react";
+import { getAllFeedbacks, updateFeedbackStatus } from "@/lib/supabase/db";
+import { UserFeedback } from "@/types";
 import { formatCurrency } from "@/lib/utils";
 
 const roleBadgeClass: Record<string, string> = {
@@ -47,6 +49,7 @@ export default function AdminPage() {
     const { user } = useAuthStore();
     const { labourers, sprayRecords, cuttingRecords, expenses, pesticides, plots } = useStore();
     const [allUsers, setAllUsers] = useState<ProfileRow[]>([]);
+    const [feedbacks, setFeedbacks] = useState<UserFeedback[]>([]);
 
     useEffect(() => {
         if (user?.role !== "ADMIN") {
@@ -54,7 +57,17 @@ export default function AdminPage() {
             return;
         }
         getAllProfiles().then(setAllUsers);
+        getAllFeedbacks().then(setFeedbacks);
     }, [user, router]);
+
+    const handleMarkAsRead = async (id: string, newStatus: "READ" | "RESOLVED") => {
+        try {
+            await updateFeedbackStatus(id, newStatus);
+            setFeedbacks(feedbacks.map(f => f.id === id ? { ...f, status: newStatus } as UserFeedback : f));
+        } catch (e) {
+            console.error("Failed to update status");
+        }
+    };
 
     if (user?.role !== "ADMIN") return null;
 
@@ -231,6 +244,49 @@ export default function AdminPage() {
                     </CardContent>
                 </Card>
             </div>
+
+            {/* User Feedbacks Section */}
+            <Card className="border-t-4 border-t-blue-500 shadow-md">
+                <CardHeader>
+                    <CardTitle className="flex items-center gap-2 text-base">
+                        <MessageSquare className="h-5 w-5 text-blue-600" />
+                        User Feedback & Feature Requests
+                        {feedbacks.filter(f => f.status === "UNREAD").length > 0 && (
+                            <span className="ml-2 bg-blue-100 text-blue-700 text-xs px-2 py-0.5 rounded-full">
+                                {feedbacks.filter(f => f.status === "UNREAD").length} New
+                            </span>
+                        )}
+                    </CardTitle>
+                </CardHeader>
+                <CardContent>
+                    <div className="space-y-4">
+                        {feedbacks.length === 0 ? (
+                            <p className="text-sm italic text-muted-foreground text-center py-4">No feedback received yet.</p>
+                        ) : (
+                            feedbacks.map((fb) => (
+                                <div key={fb.id} className={`p-4 rounded-lg border ${fb.status === "UNREAD" ? "bg-blue-50/50 border-blue-100" : "bg-muted/30"}`}>
+                                    <div className="flex justify-between items-start mb-2">
+                                        <div>
+                                            <p className="font-semibold text-gray-900">{fb.userFullName || "Unknown Farmer"} <span className="text-xs text-muted-foreground font-normal ml-2">({fb.userEmail})</span></p>
+                                            <p className="text-[10px] text-gray-500 uppercase tracking-widest">{new Date(fb.createdAt).toLocaleString()}</p>
+                                        </div>
+                                        {fb.status === "UNREAD" ? (
+                                            <button onClick={() => handleMarkAsRead(fb.id, "READ")} className="text-xs bg-blue-600 text-white px-2 py-1 rounded hover:bg-blue-700 transition">
+                                                Mark Read
+                                            </button>
+                                        ) : (
+                                            <span className="text-xs bg-gray-200 text-gray-700 px-2 py-1 rounded font-medium">
+                                                {fb.status}
+                                            </span>
+                                        )}
+                                    </div>
+                                    <p className="text-sm text-gray-800 whitespace-pre-wrap">{fb.message}</p>
+                                </div>
+                            ))
+                        )}
+                    </div>
+                </CardContent>
+            </Card>
         </div>
     );
 }
