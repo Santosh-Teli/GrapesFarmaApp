@@ -4,7 +4,7 @@ const nextConfig: NextConfig = {
   typescript: {
     ignoreBuildErrors: true,
   },
-  optimizeFonts: false,
+  // optimizeFonts: false,
   images: {
     remotePatterns: [
       {
