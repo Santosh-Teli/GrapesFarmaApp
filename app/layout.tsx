@@ -29,7 +29,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <body className="font-sans antialiased bg-brand-bg text-brand-text-primary">
+      <body className="font-sans antialiased bg-brand-bg text-brand-text-primary" suppressHydrationWarning>
         <AppLayout>
           {children}
         </AppLayout>
