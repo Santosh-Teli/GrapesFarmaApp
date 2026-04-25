@@ -11,11 +11,13 @@ import { Plus, TrendingUp, TrendingDown, DollarSign, Wallet, MinusCircle, PieCha
 import { SaleEntryForm } from "@/components/revenue/SaleEntryForm";
 import { SalesTable } from "@/components/revenue/SalesTable";
 import { RevenueCharts } from "@/components/revenue/RevenueCharts";
+import { useTranslation } from "@/hooks/use-translation";
 
 export default function RevenuePage() {
     const { user, isAuthenticated } = useAuthStore();
     const { sprayRecords, cuttingRecords, expenses } = useStore();
     const { sales, initSales } = useRevenueStore();
+    const t = useTranslation();
     const [isLoadingSales, setIsLoadingSales] = useState(true);
 
     // Fetch sales from Supabase on mount
@@ -103,7 +105,7 @@ export default function RevenuePage() {
     return (
         <div className="space-y-6">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                <h1 className="text-2xl font-bold tracking-tight">Revenue & Expense Summary</h1>
+                <h1 className="text-2xl font-bold tracking-tight">{t.revenueTitle}</h1>
                 <div className="flex gap-4">
                     <select
                         className="h-10 rounded-md border border-input bg-background px-3 py-2 text-sm font-medium shadow-sm focus:outline-none focus:ring-1 focus:ring-ring"
@@ -115,7 +117,7 @@ export default function RevenuePage() {
                         ))}
                     </select>
                     <Button onClick={() => openForm()} className="h-10">
-                        <Plus className="mr-2 h-4 w-4" /> Add Sale Record
+                        <Plus className="mr-2 h-4 w-4" /> {t.addSaleRecord}
                     </Button>
                 </div>
             </div>
@@ -132,13 +134,13 @@ export default function RevenuePage() {
                     </div>
                     <div>
                         <h2 className="text-lg font-bold">
-                            {netProfit > 0 ? "Profit Making" : netProfit < 0 ? "Loss Making" : "Break Even"}
+                            {netProfit > 0 ? t.profitMaking : netProfit < 0 ? t.lossMaking : t.breakEven}
                         </h2>
                         <p className="text-sm opacity-80">Overall financial status for {selectedYear}</p>
                     </div>
                 </div>
                 <div className="text-right">
-                    <p className="text-xs opacity-80 font-medium">NET BALANCE</p>
+                    <p className="text-xs opacity-80 font-medium">{t.netBalance.toUpperCase()}</p>
                     <p className="text-2xl font-black">{formatCurrency(netProfit)}</p>
                 </div>
             </div>
@@ -147,18 +149,18 @@ export default function RevenuePage() {
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
                 <Card>
                     <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-                        <CardTitle className="text-sm font-medium">Total Revenue</CardTitle>
+                        <CardTitle className="text-sm font-medium">{t.totalRevenue}</CardTitle>
                         <DollarSign className="h-4 w-4 text-green-600" />
                     </CardHeader>
                     <CardContent>
                         <div className="text-2xl font-bold text-green-700">{formatCurrency(totalRevenue)}</div>
-                        <p className="text-xs text-muted-foreground mt-1">From product sales</p>
+                        <p className="text-xs text-muted-foreground mt-1">{t.fromProductSales}</p>
                     </CardContent>
                 </Card>
                 
                 <Card>
                     <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-                        <CardTitle className="text-sm font-medium">Total Expenses</CardTitle>
+                        <CardTitle className="text-sm font-medium">{t.totalExpenses}</CardTitle>
                         <MinusCircle className="h-4 w-4 text-red-600" />
                     </CardHeader>
                     <CardContent>
@@ -169,7 +171,7 @@ export default function RevenuePage() {
 
                 <Card>
                     <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-                        <CardTitle className="text-sm font-medium">Net Profit</CardTitle>
+                        <CardTitle className="text-sm font-medium">{t.netProfit}</CardTitle>
                         <Wallet className={`h-4 w-4 ${netProfit >= 0 ? "text-green-600" : "text-red-600"}`} />
                     </CardHeader>
                     <CardContent>
@@ -182,7 +184,7 @@ export default function RevenuePage() {
 
                 <Card>
                     <CardHeader className="flex flex-row items-center justify-between pb-2 space-y-0">
-                        <CardTitle className="text-sm font-medium">Profit Margin</CardTitle>
+                        <CardTitle className="text-sm font-medium">{t.profitMargin}</CardTitle>
                         <PieChartIcon className="h-4 w-4 text-blue-600" />
                     </CardHeader>
                     <CardContent>

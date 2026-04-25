@@ -17,6 +17,7 @@ import type {
 import type {
   Farm, Plot, Pesticide, Labour, SprayRecord,
   CuttingRecord, LabourWork, OtherExpense, Payment, PesticideUsage,
+  SpraySchedule, SprayPhoto, SprayEffectiveness,
 } from "@/types";
 
 // ─── Mappers: DB Row → App Type ───────────────────────────────────────────────
@@ -756,4 +757,202 @@ export async function deleteSale(id: string) {
   const supabase = getSupabaseClient() as any;
   const { error } = await supabase.from("product_sales").delete().eq("id", id);
   if (error) throw error;
+}
+
+// ==========================================
+// SPRAY SCHEDULES
+// ==========================================
+
+export async function getSpraySchedules(userId: string): Promise<SpraySchedule[]> {
+  const supabase = getSupabaseClient() as any;
+  const { data, error } = await supabase
+    .from("spray_schedules")
+    .select("*")
+    .eq("user_id", userId)
+    .order("planned_date", { ascending: true });
+  if (error || !data) return [];
+  return data.map((d: any) => ({
+    id: d.id,
+    userId: d.user_id,
+    plotId: d.plot_id,
+    plannedDate: d.planned_date,
+    targetDisease: d.target_disease ?? undefined,
+    targetPest: d.target_pest ?? undefined,
+    notes: d.notes ?? undefined,
+    status: d.status,
+    convertedToSprayId: d.converted_to_spray_id ?? undefined,
+    createdAt: d.created_at,
+  }));
+}
+
+export async function createSpraySchedule(schedule: Omit<SpraySchedule, 'id' | 'createdAt'>): Promise<SpraySchedule | null> {
+  const supabase = getSupabaseClient() as any;
+  const { data, error } = await supabase
+    .from("spray_schedules")
+    .insert({
+      user_id: schedule.userId,
+      plot_id: schedule.plotId,
+      planned_date: schedule.plannedDate,
+      target_disease: schedule.targetDisease ?? null,
+      target_pest: schedule.targetPest ?? null,
+      notes: schedule.notes ?? null,
+      status: schedule.status,
+    })
+    .select()
+    .single();
+  if (error || !data) {
+    console.error("[createSpraySchedule] Supabase error:", error?.message, error?.details, error?.hint);
+    return null;
+  }
+  return {
+    id: data.id,
+    userId: data.user_id,
+    plotId: data.plot_id,
+    plannedDate: data.planned_date,
+    targetDisease: data.target_disease ?? undefined,
+    targetPest: data.target_pest ?? undefined,
+    notes: data.notes ?? undefined,
+    status: data.status,
+    convertedToSprayId: data.converted_to_spray_id ?? undefined,
+    createdAt: data.created_at,
+  };
+}
+
+export async function updateSprayScheduleStatus(id: string, status: SpraySchedule['status'], convertedToSprayId?: string): Promise<void> {
+  const supabase = getSupabaseClient() as any;
+  await supabase
+    .from("spray_schedules")
+    .update({ status, converted_to_spray_id: convertedToSprayId ?? null })
+    .eq("id", id);
+}
+
+export async function deleteSpraySchedule(id: string): Promise<void> {
+  const supabase = getSupabaseClient() as any;
+  await supabase.from("spray_schedules").delete().eq("id", id);
+}
+
+// ==========================================
+// SPRAY PHOTOS
+// ==========================================
+
+export async function getSprayPhotos(sprayRecordId: string): Promise<SprayPhoto[]> {
+  const supabase = getSupabaseClient() as any;
+  const { data, error } = await supabase
+    .from("spray_photos")
+    .select("*")
+    .eq("spray_record_id", sprayRecordId)
+    .order("created_at");
+  if (error || !data) return [];
+  return data.map((d: any) => ({
+    id: d.id,
+    userId: d.user_id,
+    sprayRecordId: d.spray_record_id,
+    photoUrl: d.photo_url,
+    photoType: d.photo_type,
+    storagePath: d.storage_path,
+    fileSizeBytes: d.file_size_bytes,
+    createdAt: d.created_at,
+  }));
+}
+
+export async function createSprayPhoto(photo: Omit<SprayPhoto, 'id' | 'createdAt'>): Promise<SprayPhoto | null> {
+  const supabase = getSupabaseClient() as any;
+  const { data, error } = await supabase
+    .from("spray_photos")
+    .insert({
+      user_id: photo.userId,
+      spray_record_id: photo.sprayRecordId,
+      photo_url: photo.photoUrl,
+      photo_type: photo.photoType,
+      storage_path: photo.storagePath,
+      file_size_bytes: photo.fileSizeBytes,
+    })
+    .select()
+    .single();
+  if (error || !data) return null;
+  return {
+    id: data.id,
+    userId: data.user_id,
+    sprayRecordId: data.spray_record_id,
+    photoUrl: data.photo_url,
+    photoType: data.photo_type,
+    storagePath: data.storage_path,
+    fileSizeBytes: data.file_size_bytes,
+    createdAt: data.created_at,
+  };
+}
+
+export async function deleteSprayPhoto(id: string, storagePath: string): Promise<void> {
+  const supabase = getSupabaseClient() as any;
+  await supabase.storage.from("spray-photos").remove([storagePath]);
+  await supabase.from("spray_photos").delete().eq("id", id);
+}
+
+// ==========================================
+// SPRAY EFFECTIVENESS
+// ==========================================
+
+export async function getSprayEffectiveness(sprayRecordId: string): Promise<SprayEffectiveness | null> {
+  const supabase = getSupabaseClient() as any;
+  const { data, error } = await supabase
+    .from("spray_effectiveness")
+    .select("*")
+    .eq("spray_record_id", sprayRecordId)
+    .maybeSingle();
+  if (error || !data) return null;
+  return {
+    id: data.id,
+    userId: data.user_id,
+    sprayRecordId: data.spray_record_id,
+    rating: data.rating,
+    effectivenessNotes: data.effectiveness_notes ?? undefined,
+    diseaseControlled: data.disease_controlled,
+    reapplicationNeeded: data.reapplication_needed,
+    ratedAt: data.rated_at,
+  };
+}
+
+export async function getAllUnratedOldSprays(userId: string): Promise<any[]> {
+  const supabase = getSupabaseClient() as any;
+  const sevenDaysAgo = new Date();
+  sevenDaysAgo.setDate(sevenDaysAgo.getDate() - 7);
+  const { data, error } = await supabase
+    .from("spray_records")
+    .select(`
+      id, plot_id, spray_date, spray_reason, reason_detail,
+      spray_effectiveness(id)
+    `)
+    .eq("user_id", userId)
+    .lte("spray_date", sevenDaysAgo.toISOString().split('T')[0])
+    .order("spray_date", { ascending: false });
+  if (error || !data) return [];
+  return data.filter((d: any) => !d.spray_effectiveness || d.spray_effectiveness.length === 0);
+}
+
+export async function upsertSprayEffectiveness(effectiveness: Omit<SprayEffectiveness, 'id' | 'ratedAt'>): Promise<SprayEffectiveness | null> {
+  const supabase = getSupabaseClient() as any;
+  const { data, error } = await supabase
+    .from("spray_effectiveness")
+    .upsert({
+      user_id: effectiveness.userId,
+      spray_record_id: effectiveness.sprayRecordId,
+      rating: effectiveness.rating,
+      effectiveness_notes: effectiveness.effectivenessNotes ?? null,
+      disease_controlled: effectiveness.diseaseControlled,
+      reapplication_needed: effectiveness.reapplicationNeeded,
+      rated_at: new Date().toISOString(),
+    }, { onConflict: 'spray_record_id,user_id' })
+    .select()
+    .single();
+  if (error || !data) return null;
+  return {
+    id: data.id,
+    userId: data.user_id,
+    sprayRecordId: data.spray_record_id,
+    rating: data.rating,
+    effectivenessNotes: data.effectiveness_notes ?? undefined,
+    diseaseControlled: data.disease_controlled,
+    reapplicationNeeded: data.reapplication_needed,
+    ratedAt: data.rated_at,
+  };
 }

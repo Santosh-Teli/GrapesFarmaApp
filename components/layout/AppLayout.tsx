@@ -7,6 +7,7 @@ import { Header } from "./Header";
 import { ImpersonationBanner } from "./ImpersonationBanner";
 import { ThemeProvider } from "@/components/theme-provider";
 import { useAuthStore } from "@/store/authStore";
+import { BottomNav } from "./BottomNav";
 
 const PUBLIC_ROUTES = ["/login", "/register", "/forgot-password", "/reset-password"];
 const FARMER_ONLY_ROUTES = [
@@ -106,13 +107,14 @@ export function AppLayout({ children }: { children: React.ReactNode }) {
                 <div className="flex-1 flex flex-col min-h-screen transition-all duration-300 w-full">
                     <ImpersonationBanner />
                     <Header onMenuClick={() => setSidebarOpen(true)} />
-                    <main className="flex-1 overflow-x-hidden p-4 sm:p-6 lg:p-8">
+                    <main className="flex-1 overflow-x-hidden p-4 sm:p-6 lg:p-8 pb-24 lg:pb-8">
                         <div className="mx-auto max-w-7xl animate-in fade-in duration-500">
                             {children}
                         </div>
                     </main>
                 </div>
             </div>
+            <BottomNav />
         </ThemeProvider>
     );
 }

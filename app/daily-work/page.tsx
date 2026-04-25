@@ -5,13 +5,15 @@ import { SingleEntryTab } from "@/components/daily-work/SingleEntryTab";
 import { BulkEntryTab } from "@/components/daily-work/BulkEntryTab";
 import { Button } from "@/components/ui/button";
 import { cn } from "@/lib/utils";
+import { useTranslation } from "@/hooks/use-translation";
 
 export default function DailyWorkPage() {
     const [activeTab, setActiveTab] = useState<"single" | "bulk">("single");
+    const t = useTranslation();
 
     return (
         <div className="space-y-6">
-            <h1 className="text-2xl font-bold tracking-tight">Daily Labour Work</h1>
+            <h1 className="text-2xl font-bold tracking-tight">{t.dailyWorkTitle}</h1>
 
             <div className="flex space-x-1 rounded-lg bg-muted p-1 w-fit">
                 <Button
@@ -20,7 +22,7 @@ export default function DailyWorkPage() {
                     className={cn(activeTab === "single" && "bg-background shadow")}
                     onClick={() => setActiveTab("single")}
                 >
-                    Single Entry
+                    {t.singleEntry}
                 </Button>
                 <Button
                     variant="ghost"
@@ -28,7 +30,7 @@ export default function DailyWorkPage() {
                     className={cn(activeTab === "bulk" && "bg-background shadow")}
                     onClick={() => setActiveTab("bulk")}
                 >
-                    Bulk Entry
+                    {t.bulkEntry}
                 </Button>
             </div>
 

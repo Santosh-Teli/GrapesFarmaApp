@@ -92,7 +92,7 @@ export default function LabourDetailPage({ params }: { params: Promise<{ id: str
             <Card>
                 <CardHeader><CardTitle>Work History</CardTitle></CardHeader>
                 <CardContent>
-                    <div className="rounded-md border overflow-x-auto">
+                    <div className="table-mobile-scroll rounded-md border">
                         <table className="w-full text-sm text-left">
                             <thead className="bg-muted/50 text-muted-foreground">
                                 <tr>

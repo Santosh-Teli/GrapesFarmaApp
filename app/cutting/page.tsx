@@ -8,9 +8,11 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Plus, Trash2 } from "lucide-react";
 import { formatCurrency } from "@/lib/utils";
+import { useTranslation } from "@/hooks/use-translation";
 
 export default function CuttingPage() {
     const { cuttingRecords, setCuttingRecords, plots } = useStore();
+    const t = useTranslation();
     const [dateFrom, setDateFrom] = useState("");
     const [dateTo, setDateTo] = useState("");
     const [typeFilter, setTypeFilter] = useState("");
@@ -32,11 +34,11 @@ export default function CuttingPage() {
     return (
         <div className="space-y-6">
             <div className="flex justify-between items-center">
-                <h1 className="text-2xl font-bold tracking-tight">Cutting Management</h1>
+                <h1 className="text-2xl font-bold tracking-tight">{t.cuttingTitle}</h1>
                 <Link href="/cutting/add">
                     <Button>
                         <Plus className="h-4 w-4 mr-2" />
-                        Add Record
+                        {t.addCutting}
                     </Button>
                 </Link>
             </div>
@@ -62,23 +64,23 @@ export default function CuttingPage() {
                     </select>
                 </CardHeader>
                 <CardContent>
-                    <div className="rounded-md border overflow-x-auto">
+                    <div className="table-mobile-scroll rounded-md border">
                         <table className="w-full text-sm text-left">
                             <thead className="bg-muted/50 text-muted-foreground">
                                 <tr>
-                                    <th className="p-3 font-medium">Date</th>
-                                    <th className="p-3 font-medium">Plot</th>
-                                    <th className="p-3 font-medium">Type</th>
-                                    <th className="p-3 font-medium">Labour (M/F)</th>
+                                    <th className="p-3 font-medium">{t.date}</th>
+                                    <th className="p-3 font-medium">{t.selectPlot}</th>
+                                    <th className="p-3 font-medium">{t.cuttingType}</th>
+                                    <th className="p-3 font-medium">{t.labourCount}</th>
                                     <th className="p-3 font-medium">Day Type</th>
-                                    <th className="p-3 font-medium">Total Cost</th>
+                                    <th className="p-3 font-medium">{t.totalCost}</th>
                                     <th className="p-3 font-medium text-right">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {filteredRecords.length === 0 ? (
                                     <tr>
-                                        <td colSpan={7} className="p-4 text-center text-muted-foreground">No records found.</td>
+                                        <td colSpan={7} className="p-4 text-center text-muted-foreground">{t.noCuttingRecords}</td>
                                     </tr>
                                 ) : (
                                     filteredRecords.map((rec) => (
@@ -104,7 +106,7 @@ export default function CuttingPage() {
                     <div className="mt-4 p-4 bg-muted/20 rounded-md flex justify-between items-center">
                         <span className="font-semibold text-muted-foreground">Total Records: {filteredRecords.length}</span>
                         <div className="text-xl font-bold text-primary">
-                            Total Cost: {formatCurrency(totalCost)}
+                            {t.totalCost}: {formatCurrency(totalCost)}
                         </div>
                     </div>
                 </CardContent>

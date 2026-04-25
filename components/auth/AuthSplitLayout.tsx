@@ -1,6 +1,7 @@
 import { Grape } from "lucide-react";
 import Link from "next/link";
 import { ReactNode } from "react";
+import { FarmerQuotes } from "@/components/auth/FarmerQuotes";
 
 interface AuthSplitLayoutProps {
   children: ReactNode;
@@ -39,6 +40,8 @@ export function AuthSplitLayout({
             <p className="text-brand-surface/80 text-lg leading-relaxed font-sans">
               {subtitle}
             </p>
+            
+            <FarmerQuotes />
           </div>
         </div>
 

@@ -10,11 +10,13 @@ import { Input } from "@/components/ui/input";
 import { Modal } from "@/components/ui/modal";
 import { Plus, Search, User, Phone, Briefcase, Calendar, DollarSign, ExternalLink } from "lucide-react";
 import { cn, formatCurrency } from "@/lib/utils";
+import { useTranslation } from "@/hooks/use-translation";
 
 const generateId = () => crypto.randomUUID();
 
 export default function LabourMasterPage() {
     const { labourers, setLabourers, labourWork } = useStore();
+    const t = useTranslation();
     const [searchTerm, setSearchTerm] = useState("");
     const [showInactive, setShowInactive] = useState(false);
     const [skillFilter, setSkillFilter] = useState("");
@@ -72,10 +74,10 @@ export default function LabourMasterPage() {
     return (
         <div className="space-y-6">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                <h1 className="text-2xl font-bold tracking-tight">Labour Master</h1>
+                <h1 className="text-2xl font-bold tracking-tight">{t.labourTitle}</h1>
                 <Button onClick={openAddModal}>
                     <Plus className="h-4 w-4 mr-2" />
-                    Add Labour
+                    {t.addLabour}
                 </Button>
             </div>
 

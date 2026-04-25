@@ -49,7 +49,7 @@ export interface Labour {
     userId: string;
 }
 
-export type CropStage = 'Flowering' | 'Fruiting' | 'Growth' | 'Dormant';
+export type CropStage = 'Dormant' | 'Budding' | 'Flowering' | 'FruitSet' | 'Veraison' | 'Harvest' | 'Fruiting' | 'Growth';
 export type WeatherCondition = 'Sunny' | 'Rainy' | 'Cloudy' | 'Windy';
 export type SprayReason = 'Disease' | 'Pest' | 'Preventive' | 'Growth';
 
@@ -77,6 +77,51 @@ export interface SprayRecord {
     totalSprayCost: number;
     notes?: string;
     userId: string;
+    // Weather auto-detection fields
+    weatherTemperature?: number;
+    weatherHumidity?: number;
+    weatherWindSpeed?: number;
+    weatherLocation?: string;
+    weatherDetectedAt?: string;
+}
+
+export type ScheduleStatus = 'PLANNED' | 'COMPLETED' | 'CANCELLED';
+
+export interface SpraySchedule {
+    id: string;
+    userId: string;
+    plotId: string;
+    plannedDate: string;
+    targetDisease?: string;
+    targetPest?: string;
+    notes?: string;
+    status: ScheduleStatus;
+    convertedToSprayId?: string;
+    createdAt: string;
+}
+
+export type PhotoType = 'BEFORE' | 'AFTER';
+
+export interface SprayPhoto {
+    id: string;
+    userId: string;
+    sprayRecordId: string;
+    photoUrl: string;
+    photoType: PhotoType;
+    storagePath: string;
+    fileSizeBytes: number;
+    createdAt: string;
+}
+
+export interface SprayEffectiveness {
+    id: string;
+    userId: string;
+    sprayRecordId: string;
+    rating: 1 | 2 | 3 | 4 | 5;
+    effectivenessNotes?: string;
+    diseaseControlled: boolean;
+    reapplicationNeeded: boolean;
+    ratedAt: string;
 }
 
 export type CuttingType = '1st_Cutting' | '2nd_Cutting' | 'Summer_Pruning' | 'Winter_Pruning' | 'Thinning';

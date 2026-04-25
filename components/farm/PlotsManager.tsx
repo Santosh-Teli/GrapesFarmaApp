@@ -69,7 +69,7 @@ export function PlotsManager() {
                 </Button>
             </CardHeader>
             <CardContent>
-                <div className="rounded-md border">
+                <div className="table-mobile-scroll rounded-md border">
                     <table className="w-full text-sm text-left">
                         <thead className="bg-muted/50 text-muted-foreground">
                             <tr>

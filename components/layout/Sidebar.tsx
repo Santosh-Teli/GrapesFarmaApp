@@ -6,47 +6,50 @@ import { cn } from "@/lib/utils";
 import {
     LayoutDashboard, Tractor, FlaskConical, Droplets, Scissors,
     Users, CalendarCheck, Receipt, Wallet, FileText, X, LogOut,
-    ShieldCheck, Grape, TrendingUp
+    ShieldCheck, Grape, TrendingUp, CalendarClock
 } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useAuthStore } from "@/store/authStore";
 import { supabaseLogout } from "@/lib/supabase/auth";
 import { toast } from "sonner";
+import { useTranslation } from "@/hooks/use-translation";
 
 interface SidebarProps {
     isOpen: boolean;
     onClose: () => void;
 }
 
-const menuItems = [
-    { href: "/", label: "Dashboard", icon: LayoutDashboard },
-    { href: "/farm-setup", label: "Farm Setup", icon: Tractor },
-    { href: "/pesticides", label: "Pesticide Master", icon: FlaskConical },
-    { href: "/spray", label: "Spray Management", icon: Droplets },
-    { href: "/cutting", label: "Cutting Management", icon: Scissors },
-    { href: "/labour", label: "Labour Master", icon: Users },
-    { href: "/daily-work", label: "Daily Labour Work", icon: CalendarCheck },
-    { href: "/expenses", label: "Expense Management", icon: Receipt },
-    { href: "/payments", label: "Payment Management", icon: Wallet },
-    { href: "/reports", label: "Reports", icon: FileText },
-    { href: "/revenue", label: "Revenue & Summary", icon: TrendingUp },
-];
-
-const adminItems = [
-    { href: "/admin", label: "Dashboard Overview", icon: ShieldCheck },
-    { href: "/admin/users", label: "User Management", icon: Users },
-];
-
 export function Sidebar({ isOpen, onClose }: SidebarProps) {
     const pathname = usePathname();
     const router = useRouter();
     const { user, logout, isAuthenticated, viewingUserId, clearViewingUser } = useAuthStore();
     const isImpersonating = !!viewingUserId;
+    const t = useTranslation();
+
+    const menuItems = [
+        { href: "/", label: t.dashboard, icon: LayoutDashboard },
+        { href: "/farm-setup", label: t.farmSetup, icon: Tractor },
+        { href: "/pesticides", label: t.pesticideMaster, icon: FlaskConical },
+        { href: "/spray", label: t.sprayManagement, icon: Droplets },
+        { href: "/spray/schedule", label: "Spray Schedule", icon: CalendarClock },
+        { href: "/cutting", label: t.cuttingManagement, icon: Scissors },
+        { href: "/labour", label: t.labourMaster, icon: Users },
+        { href: "/daily-work", label: t.dailyLabourWork, icon: CalendarCheck },
+        { href: "/expenses", label: t.expenseManagement, icon: Receipt },
+        { href: "/payments", label: t.paymentManagement, icon: Wallet },
+        { href: "/reports", label: t.reports, icon: FileText },
+        { href: "/revenue", label: t.revenueSummary, icon: TrendingUp },
+    ];
+
+    const adminItems = [
+        { href: "/admin", label: t.dashboardOverview, icon: ShieldCheck },
+        { href: "/admin/users", label: t.userManagement, icon: Users },
+    ];
 
     const handleLogout = async () => {
         await supabaseLogout();
         logout();
-        toast.success("Logged out successfully.");
+        toast.success(t.logout);
         router.push("/login");
     };
 
@@ -82,15 +85,14 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
 
                 {/* Navigation */}
                 <nav className="flex-1 overflow-y-auto py-4 scrollbar-thin">
-                    <p className="px-5 mb-2 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">Main Menu</p>
+                    <p className="px-5 mb-2 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">
+                        {t.farmerMenu}
+                    </p>
                     <ul className="space-y-0.5 px-3">
                         {menuItems
                             .filter(item => {
-                                // Always show Dashboard
                                 if (item.href === "/") return true;
-                                // If Admin, only show other links if impersonating
                                 if (isAdmin) return isImpersonating;
-                                // Farmers always see these
                                 return true;
                             })
                             .map((item) => {
@@ -119,7 +121,9 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                     {/* Admin-only section */}
                     {isAdmin && (
                         <>
-                            <p className="px-5 mt-5 mb-2 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">Administration</p>
+                            <p className="px-5 mt-5 mb-2 text-[10px] font-semibold uppercase tracking-widest text-muted-foreground">
+                                {t.adminMenu}
+                            </p>
                             <ul className="space-y-0.5 px-3">
                                 {adminItems.map((item) => {
                                     const Icon = item.icon;
@@ -167,7 +171,7 @@ export function Sidebar({ isOpen, onClose }: SidebarProps) {
                                 className="w-full flex items-center gap-2 px-3 py-2 rounded-lg text-sm text-red-600 hover:bg-red-50 transition-colors font-medium"
                             >
                                 <LogOut className="h-4 w-4" />
-                                Sign out
+                                {t.logout}
                             </button>
                         </>
                     ) : (

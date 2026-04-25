@@ -15,9 +15,11 @@ import { startOfMonth, endOfMonth, startOfYear, endOfYear, format } from "date-f
 import * as XLSX from "xlsx";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
+import { useTranslation } from "@/hooks/use-translation";
 
 export default function ExpensesPage() {
     const store = useStore();
+    const t = useTranslation();
     const { sprayRecords, cuttingRecords, labourWork, expenses } = store;
 
     // Filters
@@ -72,9 +74,9 @@ export default function ExpensesPage() {
     return (
         <div className="space-y-6">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                <h1 className="text-2xl font-bold tracking-tight">Expense Management</h1>
+                <h1 className="text-2xl font-bold tracking-tight">{t.expenseTitle}</h1>
                 <div className="flex gap-2">
-                    <Button variant="outline" onClick={handleExportExcel}>Export Excel</Button>
+                    <Button variant="outline" onClick={handleExportExcel}>{t.reports} Excel</Button>
                 </div>
             </div>
 
@@ -102,16 +104,16 @@ export default function ExpensesPage() {
                 <Card className="md:col-span-2 lg:col-span-4 bg-primary/5 border-primary/20">
                     <CardContent className="p-6 flex flex-col sm:flex-row justify-between items-center gap-4">
                         <div>
-                            <p className="text-lg font-medium text-muted-foreground">Grand Total Expense</p>
+                            <p className="text-lg font-medium text-muted-foreground">{t.totalExpenses}</p>
                             <p className="text-4xl font-bold text-primary">{formatCurrency(grandTotal)}</p>
                         </div>
                         <div className="flex gap-8">
                             <div className="text-center">
-                                <p className="text-sm text-green-600 font-medium">Paid</p>
+                                <p className="text-sm text-green-600 font-medium">{t.markPaid}</p>
                                 <p className="text-xl font-bold text-green-700">{formatCurrency(totalPaid)}</p>
                             </div>
                             <div className="text-center">
-                                <p className="text-sm text-red-600 font-medium">Pending</p>
+                                <p className="text-sm text-red-600 font-medium">{t.pending}</p>
                                 <p className="text-xl font-bold text-red-700">{formatCurrency(totalPending)}</p>
                             </div>
                         </div>
@@ -132,14 +134,14 @@ export default function ExpensesPage() {
             <Card>
                 <CardHeader><CardTitle>All Expenses (Combined)</CardTitle></CardHeader>
                 <CardContent>
-                    <div className="rounded-md border overflow-x-auto max-h-[500px]">
+                    <div className="table-mobile-scroll rounded-md border max-h-[500px]">
                         <table className="w-full text-sm text-left relative">
                             <thead className="bg-muted/50 text-muted-foreground sticky top-0">
                                 <tr>
-                                    <th className="p-3">Date</th>
-                                    <th className="p-3">Category</th>
-                                    <th className="p-3">Description</th>
-                                    <th className="p-3">Amount</th>
+                                    <th className="p-3">{t.date}</th>
+                                    <th className="p-3">{t.category}</th>
+                                    <th className="p-3">{t.description}</th>
+                                    <th className="p-3">{t.amount}</th>
                                 </tr>
                             </thead>
                             <tbody>

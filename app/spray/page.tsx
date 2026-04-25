@@ -11,9 +11,11 @@ import { formatCurrency, cn } from "@/lib/utils";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
 import * as XLSX from "xlsx";
+import { useTranslation } from "@/hooks/use-translation";
 
 export default function SprayPage() {
     const { sprayRecords, setSprayRecords, plots, pesticides, farm } = useStore();
+    const t = useTranslation();
 
     const [dateFrom, setDateFrom] = useState("");
     const [dateTo, setDateTo] = useState("");
@@ -92,14 +94,14 @@ export default function SprayPage() {
     return (
         <div className="space-y-6">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                <h1 className="text-2xl font-bold tracking-tight">Spray Management</h1>
+                <h1 className="text-2xl font-bold tracking-tight">{t.sprayManagementTitle}</h1>
                 <div className="flex gap-2">
                     <Button variant="outline" onClick={handleExportPDF}>PDF</Button>
                     <Button variant="outline" onClick={handleExportExcel}>Excel</Button>
                     <Link href="/spray/add">
                         <Button>
                             <Plus className="h-4 w-4 mr-2" />
-                            Add Record
+                            {t.addSpray}
                         </Button>
                     </Link>
                 </div>
@@ -122,23 +124,23 @@ export default function SprayPage() {
                     </select>
                 </CardHeader>
                 <CardContent>
-                    <div className="rounded-md border overflow-x-auto">
+                    <div className="table-mobile-scroll rounded-md border">
                         <table className="w-full text-sm text-left">
                             <thead className="bg-muted/50 text-muted-foreground">
                                 <tr>
-                                    <th className="p-3 font-medium">Date</th>
-                                    <th className="p-3 font-medium">Plot</th>
-                                    <th className="p-3 font-medium">Stage</th>
-                                    <th className="p-3 font-medium">Reason</th>
-                                    <th className="p-3 font-medium">Pesticides</th>
-                                    <th className="p-3 font-medium">Total Cost</th>
+                                    <th className="p-3 font-medium">{t.date}</th>
+                                    <th className="p-3 font-medium">{t.selectPlot}</th>
+                                    <th className="p-3 font-medium">{t.cropStage}</th>
+                                    <th className="p-3 font-medium">{t.sprayReason}</th>
+                                    <th className="p-3 font-medium">{t.pesticideMaster}</th>
+                                    <th className="p-3 font-medium">{t.totalCost}</th>
                                     <th className="p-3 font-medium text-right">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {filteredRecords.length === 0 ? (
                                     <tr>
-                                        <td colSpan={7} className="p-4 text-center text-muted-foreground">No records found.</td>
+                                        <td colSpan={7} className="p-4 text-center text-muted-foreground">{t.noSprayRecords}</td>
                                     </tr>
                                 ) : (
                                     filteredRecords.map((rec) => (

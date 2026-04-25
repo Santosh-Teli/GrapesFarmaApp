@@ -15,7 +15,6 @@ import { useAuthStore } from "@/store/authStore";
 import { Label } from "@/components/ui/label";
 import { Input } from "@/components/ui/input";
 import { Button } from "@/components/ui/button";
-import { Separator } from "@/components/ui/separator";
 
 type LoginValues = z.infer<typeof loginSchema>;
 
@@ -61,20 +60,6 @@ function LoginFormInner() {
     }
   };
 
-  const fillDemo = (username: string, password: string) => {
-    form.setValue("username", username);
-    form.setValue("password", password);
-  };
-
-  // Demo badges — Admin badge only visible when ?admin is in the URL
-  const demoBadges = [
-    ...(isAdminMode
-      ? [{ label: "Admin", u: "AdminKing", p: "Kingkohli1@", color: "bg-purple-100 text-purple-700 border-purple-300" }]
-      : []),
-    { label: "Customer", u: "rahul_sharma", p: "Test@1234", color: "bg-blue-100 text-blue-700 border-blue-300" },
-    { label: "Farmer", u: "suresh_farmer", p: "Farm@5678", color: "bg-green-100 text-green-700 border-green-300" },
-  ];
-
   return (
     <div className="space-y-6">
       {/* Admin Mode Banner */}
@@ -84,25 +69,6 @@ function LoginFormInner() {
           <span>Admin login mode — use your administrator credentials to sign in.</span>
         </div>
       )}
-
-      {/* Demo Quick Login Badges */}
-      <div className="space-y-2">
-        <p className="text-xs text-brand-text-secondary font-medium uppercase tracking-wide">Quick demo login</p>
-        <div className="flex flex-wrap gap-2">
-          {demoBadges.map((d) => (
-            <button
-              key={d.label}
-              type="button"
-              onClick={() => fillDemo(d.u, d.p)}
-              className={`text-xs px-3 py-1.5 rounded-full border font-medium transition-all hover:shadow-sm ${d.color}`}
-            >
-              {d.label}
-            </button>
-          ))}
-        </div>
-      </div>
-
-      <Separator />
 
       <form onSubmit={handleSubmit(onSubmit)} className="space-y-5">
         {/* Server Error */}

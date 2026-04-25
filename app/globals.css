@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600;700&display=swap');
 @import "tailwindcss";
 @source "../components";
 @source "../app";
@@ -155,5 +156,65 @@
     cursor: pointer;
     padding: 0;
     margin: 0;
+  }
+}
+
+@media print {
+  .no-print { display: none !important; }
+  nav, aside, header { display: none !important; }
+  body { background: white !important; }
+  .print-break { page-break-before: always; }
+}
+
+/* ─── Mobile-first global fixes ─────────────────────────────── */
+
+/* Safe-area insets for iPhone notch / home bar */
+.pb-safe  { padding-bottom: env(safe-area-inset-bottom, 0px); }
+.pt-safe  { padding-top:    env(safe-area-inset-top,    0px); }
+
+/* Prevent iOS double-tap zoom on buttons */
+* {
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+/* Prevent iOS form zoom (font-size must be >= 16px on inputs) */
+input, select, textarea {
+  font-size: max(16px, 1rem);
+}
+
+/* Smooth momentum scrolling everywhere */
+html, body {
+  -webkit-overflow-scrolling: touch;
+  overflow-x: hidden;
+}
+
+/* Tables: horizontally scrollable on mobile */
+.table-mobile-scroll {
+  overflow-x: auto;
+  -webkit-overflow-scrolling: touch;
+}
+.table-mobile-scroll table {
+  min-width: 600px;
+}
+
+/* Touch-friendly minimum tap target */
+.touch-target {
+  min-height: 44px;
+  min-width: 44px;
+}
+
+/* Card stack helper — full-width cards on mobile */
+.mobile-stack {
+  @apply flex flex-col gap-3;
+}
+@media (min-width: 640px) {
+  .mobile-stack {
+    @apply grid grid-cols-2;
+  }
+}
+@media (min-width: 1024px) {
+  .mobile-stack {
+    @apply grid-cols-3;
   }
 }

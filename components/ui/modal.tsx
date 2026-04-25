@@ -21,7 +21,7 @@ export function Modal({ isOpen, onClose, title, children }: ModalProps) {
                 <Card>
                     <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
                         <CardTitle>{title}</CardTitle>
-                        <Button variant="ghost" size="icon" onClick={onClose}>
+                        <Button type="button" variant="ghost" size="icon" onClick={onClose}>
                             <X className="h-4 w-4" />
                         </Button>
                     </CardHeader>

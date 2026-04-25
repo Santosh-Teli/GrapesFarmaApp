@@ -9,8 +9,10 @@ import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { ArrowLeft, Plus, Trash2, Save } from "lucide-react";
-import { formatCurrency } from "@/lib/utils";
+import { formatCurrency, cn } from "@/lib/utils";
 import { format } from "date-fns";
+import { CropStagePicker } from "@/components/spray/CropStagePicker";
+import { WeatherDetectButton } from "@/components/spray/WeatherDetectButton";
 
 // Helper ID gen
 const generateId = () => crypto.randomUUID();
@@ -184,25 +186,45 @@ export function SprayForm({ initialData, isEdit = false }: SprayFormProps) {
                                     ))}
                                 </select>
                             </div>
-                            <div className="space-y-2">
+                            <div className="space-y-2 md:col-span-2">
                                 <label className="text-sm font-medium">Crop Stage</label>
-                                <select
-                                    className="flex h-12 w-full rounded-md border border-input bg-background px-4 py-2 text-base"
-                                    value={formData.cropStage}
-                                    onChange={e => setFormData({ ...formData, cropStage: e.target.value as any })}
-                                >
-                                    <option value="Growth">Growth</option>
-                                    <option value="Flowering">Flowering</option>
-                                    <option value="Fruiting">Fruiting</option>
-                                    <option value="Dormant">Dormant</option>
-                                </select>
+                                <CropStagePicker
+                                    value={formData.cropStage as any || "Growth"}
+                                    onChange={(stage) => setFormData({ ...formData, cropStage: stage })}
+                                />
                             </div>
-                            <div className="space-y-2">
-                                <label className="text-sm font-medium">Weather</label>
+                            <div className="space-y-2 md:col-span-2">
+                                <label className="text-sm font-medium flex items-center justify-between">
+                                    <span>Weather Condition</span>
+                                    {formData.weatherDetectedAt && (
+                                        <span className="text-xs text-green-600 bg-green-50 px-2 py-0.5 rounded-full border border-green-200">
+                                            ✓ Auto-filled
+                                        </span>
+                                    )}
+                                </label>
+                                <WeatherDetectButton
+                                    onWeatherDetected={(w) => setFormData({
+                                        ...formData,
+                                        weatherCondition: w.condition as any,
+                                        weatherTemperature: w.temperature,
+                                        weatherHumidity: w.humidity,
+                                        weatherWindSpeed: w.windSpeed,
+                                        weatherLocation: w.location,
+                                        weatherDetectedAt: w.detectedAt,
+                                    })}
+                                />
                                 <select
-                                    className="flex h-12 w-full rounded-md border border-input bg-background px-4 py-2 text-base"
+                                    className={cn(
+                                        "flex h-12 w-full rounded-md border border-input bg-background px-4 py-2 text-base mt-2 transition-colors",
+                                        formData.weatherDetectedAt ? "border-green-300 bg-green-50/30 ring-1 ring-green-300" : ""
+                                    )}
                                     value={formData.weatherCondition}
-                                    onChange={e => setFormData({ ...formData, weatherCondition: e.target.value as any })}
+                                    onChange={e => setFormData({ 
+                                        ...formData, 
+                                        weatherCondition: e.target.value as any,
+                                        // If they manually change it, we clear the auto-detect flag
+                                        weatherDetectedAt: undefined 
+                                    })}
                                 >
                                     <option value="Sunny">Sunny</option>
                                     <option value="Cloudy">Cloudy</option>

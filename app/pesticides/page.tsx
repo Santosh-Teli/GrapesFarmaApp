@@ -9,12 +9,14 @@ import { Input } from "@/components/ui/input";
 import { Modal } from "@/components/ui/modal";
 import { Plus, Pencil, Trash2, Search, AlertTriangle } from "lucide-react";
 import { cn, formatCurrency } from "@/lib/utils";
+import { useTranslation } from "@/hooks/use-translation";
 
 // Helper for ID generation
 const generateId = () => crypto.randomUUID();
 
 export default function PesticideMasterPage() {
     const { pesticides, setPesticides } = useStore();
+    const t = useTranslation();
     const [searchTerm, setSearchTerm] = useState("");
     const [showInactive, setShowInactive] = useState(false);
 
@@ -72,10 +74,10 @@ export default function PesticideMasterPage() {
     return (
         <div className="space-y-6">
             <div className="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
-                <h1 className="text-2xl font-bold tracking-tight">Pesticide Master</h1>
+                <h1 className="text-2xl font-bold tracking-tight">{t.pesticideMasterTitle}</h1>
                 <Button onClick={openAddModal}>
                     <Plus className="h-4 w-4 mr-2" />
-                    Add Pesticide
+                    {t.addPesticide}
                 </Button>
             </div>
 
@@ -91,27 +93,27 @@ export default function PesticideMasterPage() {
                         />
                     </div>
                     <Button variant="outline" onClick={() => setShowInactive(!showInactive)}>
-                        {showInactive ? "Hide Inactive" : "Show Inactive"}
+                        {showInactive ? t.hideInactive : t.showInactive}
                     </Button>
                 </CardHeader>
                 <CardContent>
-                    <div className="rounded-md border overflow-x-auto">
+                    <div className="table-mobile-scroll rounded-md border">
                         <table className="w-full text-sm text-left">
                             <thead className="bg-muted/50 text-muted-foreground">
                                 <tr>
-                                    <th className="p-3 font-medium">Name</th>
-                                    <th className="p-3 font-medium">Company</th>
-                                    <th className="p-3 font-medium">Unit</th>
-                                    <th className="p-3 font-medium">Price/Unit</th>
-                                    <th className="p-3 font-medium">Stock</th>
-                                    <th className="p-3 font-medium">Status</th>
+                                    <th className="p-3 font-medium">{t.name}</th>
+                                    <th className="p-3 font-medium">{t.companyName}</th>
+                                    <th className="p-3 font-medium">{t.unit}</th>
+                                    <th className="p-3 font-medium">{t.pricePerUnit}</th>
+                                    <th className="p-3 font-medium">{t.stockQty}</th>
+                                    <th className="p-3 font-medium">{t.active}/{t.inactive}</th>
                                     <th className="p-3 font-medium text-right">Actions</th>
                                 </tr>
                             </thead>
                             <tbody>
                                 {filteredPesticides.length === 0 ? (
                                     <tr>
-                                        <td colSpan={7} className="p-4 text-center text-muted-foreground">No pesticides found.</td>
+                                        <td colSpan={7} className="p-4 text-center text-muted-foreground">{t.noRecordsFound}</td>
                                     </tr>
                                 ) : (
                                     filteredPesticides.map((pest) => (

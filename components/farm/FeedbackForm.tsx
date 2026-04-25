@@ -7,9 +7,11 @@ import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/com
 import { Button } from "@/components/ui/button";
 import { MessageSquarePlus } from "lucide-react";
 import { toast } from "sonner";
+import { useTranslation } from "@/hooks/use-translation";
 
 export function FeedbackForm() {
     const { user } = useAuthStore();
+    const t = useTranslation();
     const [message, setMessage] = useState("");
     const [isSubmitting, setIsSubmitting] = useState(false);
 
@@ -20,11 +22,11 @@ export function FeedbackForm() {
         setIsSubmitting(true);
         try {
             await createFeedback(user.id, message.trim());
-            toast.success("Feedback submitted! Thank you for your input.");
+            toast.success(t.feedbackSuccess);
             setMessage("");
         } catch (error: any) {
             console.error("Error submitting feedback:", error);
-            toast.error("Failed to submit feedback. Please try again later.");
+            toast.error(t.feedbackError);
         } finally {
             setIsSubmitting(false);
         }
@@ -35,7 +37,7 @@ export function FeedbackForm() {
             <CardHeader>
                 <CardTitle className="flex items-center gap-2 text-lg">
                     <MessageSquarePlus className="h-5 w-5 text-blue-600" />
-                    Help Us Improve
+                    {t.helpUsImprove}
                 </CardTitle>
                 <CardDescription>
                     Have a feature request or found a bug? Let the administrator know directly.
@@ -45,7 +47,7 @@ export function FeedbackForm() {
                 <form onSubmit={handleSubmit} className="space-y-4">
                     <textarea
                         className="flex min-h-[120px] w-full rounded-md border border-input bg-background px-3 py-2 text-sm ring-offset-background placeholder:text-muted-foreground focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-ring focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-50"
-                        placeholder="Write your feedback here..."
+                        placeholder={t.feedbackPlaceholder}
                         value={message}
                         onChange={(e) => setMessage(e.target.value)}
                         disabled={isSubmitting}
@@ -53,7 +55,7 @@ export function FeedbackForm() {
                     />
                     <div className="flex justify-end">
                         <Button type="submit" disabled={isSubmitting || !message.trim()}>
-                            {isSubmitting ? "Submitting..." : "Submit Feedback"}
+                            {isSubmitting ? t.saving : t.submitFeedback}
                         </Button>
                     </div>
                 </form>
